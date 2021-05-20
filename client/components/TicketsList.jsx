@@ -41,7 +41,6 @@ export default function TicketsList(props) {
   const loadData = () => {
     fetch('/ticket')
     .then(res => res.json())
-    .then(data => data.reverse())
     .then(data => setTickets(data))
     .catch(err => console.error(err))
   }

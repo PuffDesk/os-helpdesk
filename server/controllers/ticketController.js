@@ -99,7 +99,8 @@ ticketController.getTicketInfo = (req, res, next) => {
     'FROM "public"."TicketTable" T ' +
     'INNER JOIN "public"."Categories" CAT ON CAT."CategoryID" = T."CategoryID"' +
     'INNER JOIN "public"."UserTable" U ON U."UserID" = T."UserID"' +
-    'INNER JOIN "public"."CohortTable" CO ON CO."CohortID" = U."cohortID"';
+    'INNER JOIN "public"."CohortTable" CO ON CO."CohortID" = U."cohortID"' +
+    'ORDER BY "TicketID" DESC';
 
   // make an async query using db.query and pass in query string
   db.query(queryStr)

@@ -61,15 +61,29 @@ function TicketDetails(props) {
   };
 
   const updateTicket = (event) => {
-    // console.log('ticket to be updated ', props.details);
+    // {
+    //   "status": "closed",
+    //   "response": "turn it off",
+    //   "responderID": 2
+    // }
 
-    // fetch(`/ticket/${props.details.TicketID}`, {
-    //   method: "DELETE",
-    //   headers: { "Content-Type": "application/json" },
-    // })
-    //   .then(() => {
-    //     props.onClose();
-    //   }).catch(err => console.log(err))
+    const response = {
+      ...props.details,
+      responderID: user.UserID,
+      status: "closed",
+
+    }
+    console.log('ticket to be updated ', response);
+
+    fetch(`/ticket/${props.details.TicketID}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(response),
+    })
+      .then(() => {
+        props.onClose();
+        props.refresh();
+      }).catch(err => console.log(err))
   };
   
   return (
