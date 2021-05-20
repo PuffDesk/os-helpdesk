@@ -1,18 +1,10 @@
 const db = require("../models/db");
+
 const userController = {};
-
-// creater user
-// update ticket
-// update user
-// delete user
-
 
 // creates a User and posts to db
 userController.createUser = (req, res, next) => {
   // deconstruct request body from front end
-  // const { UserID, username, password, cohortID, usertypeID } = req.body;
-  console.log(req.body);
-  // INSERT INTO "public"."UserTable" ("username", "password", "cohortID", "usertypeID") values ('yoko', 'password', 1, 1)
   const { username, password, cohortID, usertypeID } = req.body;
   const values = [username, password, cohortID, usertypeID];
 
@@ -89,13 +81,11 @@ userController.deleteUser = (req, res, next) => {
   const { ticketId } = req.body;
   const queryStr = 'DELETE FROM "public"."UserTable" WHERE "UserID" = $1;';
   db.query(queryStr, ticketId)
-    // send to res.locals object
     .then((data) => {
       console.log("Deleting user: ", data);
       res.locals.deleteduser = data[0];
       return next();
     })
-    // catch error
     .catch((err) =>
       next({
         log: "ticketController.deleteUser: ERROR: Invalid or unfound required data on res.locals object - Expected res.locals to be an object.",
@@ -108,16 +98,12 @@ userController.deleteUser = (req, res, next) => {
 
 // gets all cohorts
 userController.getCohorts = (req, res, next) => {
-  // make a query string (SQL query)
+
   const queryStr = 'SELECT * FROM "public"."CohortTable" LIMIT 25';
 
-  // make an async query using db.query and pass in query string
   db.query(queryStr)
     .then((data) => {
-      // data from the database
-      // console.log('DATA', data.rows);
-      // return next
-      console.log("Gettin cohorts: ", data);
+      console.log("Getting cohorts: ", data);
       res.locals.allCohorts = data.rows;
       return next();
     })
@@ -130,5 +116,5 @@ userController.getCohorts = (req, res, next) => {
         },
       })
     );
-}; // Type JavaScript here and click "Run Code" or press Ctrl + s
+}; 
 module.exports = userController;

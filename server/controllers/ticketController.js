@@ -8,21 +8,12 @@ const ticketController = {};
 // x deleteTicket
 // x getCategories -> ticketController
 // x getCohortList -> userController
-// createUser
+// xcreateUser
 // updateuser
 // deleteuser
-// validateUser
+// xvalidateUser
 // startSession
 // setCookie
-
-// endpoints
-// /signin ->  validateUser, startSession, setCookie
-// /getCohortList
-// /signup -> createUser, startSession, setCookie
-// /ticket -> getTickets,
-// /getCategories
-// /ticket/create -> createTicket,
-//
 
 /** CREATE TICKET */
 
@@ -50,10 +41,7 @@ ticketController.createTicket = (req, res, next) => {
 
   db.query(getID)
     .then((data) => {
-      // console.log("data:", data.rows);
-      // console.log("data:", typeof data.rows);
       const { CategoryID } = data.rows[0];
-      // console.log("CategoryID:", CategoryID);
       return CategoryID;
     })
     .then((id) => {
@@ -71,7 +59,6 @@ ticketController.createTicket = (req, res, next) => {
       db.query(queryStr, values)
         // send to res.locals object
         .then((data) => {
-          // console.log("Creating ticket: ", id);
           res.locals.createdTicket = data[0];
           return next();
         });
@@ -79,18 +66,6 @@ ticketController.createTicket = (req, res, next) => {
 };
 
 /** READ TICKET FCNS */
-
-// gets basic information about a ticket to show on the dashboard
-// ticketController.getTicketDashInfo = (req, res, next) => {
-// make a query string (SQL query)
-
-// problem statement
-// category <--FK. needs some type of JOIN
-// created by <-- FK. needs some type of JOIN
-// created at
-// cohort <-- FK. needs some type of JOIN
-// reviewer <-- FK. needs some type of JOIN
-// status
 
 // gets detailed information about a ticket to show on the modal
 ticketController.getTicketInfo = (req, res, next) => {
@@ -105,11 +80,9 @@ ticketController.getTicketInfo = (req, res, next) => {
   // make an async query using db.query and pass in query string
   db.query(queryStr)
     .then((data) => {
-      // console.log("Ticket Detail: ", data);
       res.locals.ticketInfo = data.rows;
       return next();
     })
-    // calling global eror handler
     .catch((err) =>
       next({
         log: "ticketController.getTickets: ERROR: Invalid or unfound required data on res.locals object - Expected res.locals to be an object.",
@@ -124,10 +97,7 @@ ticketController.getTicketInfo = (req, res, next) => {
 
 // allow residents to update text as well as fellows updating the resolved status
 ticketController.updateTicket = (req, res, next) => {
-  // deconstruct request body from front end
-
-  // console.log('req params wuttt', req.params)
-  // console.log('req body wuttt', req.body)
+  
   const { ticketId } = req.params;
 
   const {
@@ -157,12 +127,15 @@ ticketController.updateTicket = (req, res, next) => {
 
   // create async db.query
   db.query(queryStr, values)
-    // send to res.locals object
     .then(() => {
       return next();
     })
-    // catch error
-    .catch((err) => next(err));
+    .catch((err) => next({
+      log: "ticketController.updateTicket: ERROR: Invalid or unfound required data on res.locals object - Expected res.locals to be an object.",
+      message: {
+        err: "ticketController.updateTicket: ERROR: Check server logs for details",
+      },
+    }));
 };
 
 /** DELETE TICKET */
@@ -174,13 +147,11 @@ ticketController.deleteTicket = (req, res, next) => {
 
   // create async db.query
   db.query(queryStr, ticketId)
-    // send to res.locals object
     .then((data) => {
       console.log("Creating ticket: ", data);
       res.locals.deletedticket = data[0];
       return next();
     })
-    // catch error
     .catch((err) =>
       next({
         log: "ticketController.deleteTicket: ERROR: Invalid or unfound required data on res.locals object - Expected res.locals to be an object.",
@@ -194,13 +165,11 @@ ticketController.deleteTicket = (req, res, next) => {
 // gets all ticket categories
 ticketController.getCategories = (req, res, next) => {
   const queryStr = 'SELECT * FROM "public"."Categories"';
-  // make an async query using db.query and pass in query string
   db.query(queryStr)
     .then((data) => {
       res.locals.categories = data.rows;
       return next();
     })
-    // calling global eror handler
     .catch((err) =>
       next({
         log: "ticketController.getCategories: ERROR: Invalid or unfound required data on res.locals object - Expected res.locals to be an object.",

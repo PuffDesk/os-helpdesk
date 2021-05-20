@@ -4,7 +4,6 @@ const cookieParser = require("cookie-parser");
 const ticketController = require("./controllers/ticketController");
 // const cors = require('cors');
 
-// const authRouter = require('./routes/authenticate');
 const PORT = 3000;
 const app = express();
 
@@ -39,27 +38,6 @@ app.use("/ticket", ticketRouter);
 app.get("/cohort", userController.getCohorts, (req, res) => {
   res.status(200).send(res.locals.allCohorts);
 });
-
-// populates dashboard ticket information
-// app.get("/dashboard", ticketController.getTicketInfo, (req, res) => {
-//   res.status(200).send(res.locals.ticketInfo);
-// });
-
-// app.get('/secret',  sessionController.verifyCookie,  (req, res) => {
-//   if (res.locals.isCookieValid) res.sendFile(path.join(__dirname, '../views/secret.html'));
-//    else res.status(200).send('You must be signed in to view this page');
-// });
-// endpoints
-// /login ->  validateUser, startSession, setCookie
-// ticket/getCohortList
-// /signup -> createUser, startSession, setCookie
-// /ticket -> getTickets,
-// /ticket/getCategories
-// /ticket/create -> createTicket,
-//
-
-// history:
-// /getTicketsByUserID
 
 // everyone: can see tickets
 // students: can submit tickets (action buttons disabled)
